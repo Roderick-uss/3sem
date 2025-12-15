@@ -4,20 +4,29 @@ B_PREFIX = bin/
 O_PREFIX = objects/
 S_PREFIX = sources/
 H_PREFIX = headers/
-T_PREFIX = text_file/
+T_PREFIX = files/
 
-SOURCES = main cmd common
+SOURCES_C = client
+SOURCES_S = server
 
-OBJECTS := $(patsubst %,$(O_PREFIX)%.o,$(SOURCES))
+OBJECTS_C := $(patsubst %,$(O_PREFIX)%.o,$(SOURCES_C))
+OBJECTS_S := $(patsubst %,$(O_PREFIX)%.o,$(SOURCES_S))
 
 HEADER_LIST = $(H_PREFIX)*.h
 
-all: main
+all: server client
 
-run: main
-	@./$(B_PREFIX)main
+run_server: server
+	@./$(B_PREFIX)server
 
-main: $(OBJECTS)
+run_client:
+	@./$(B_PREFIX)client
+
+server: $(OBJECTS_C)
+	@mkdir -p $(B_PREFIX)
+	@gcc $(FLAGS) $^ -o $(B_PREFIX)$@
+
+server: $(OBJECTS_S)
 	@mkdir -p $(B_PREFIX)
 	@gcc $(FLAGS) $^ -o $(B_PREFIX)$@
 
